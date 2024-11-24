@@ -38,6 +38,11 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
         font1 = "font/NotoSans-VariableFont_wdth,wght.ttf"
         lang2 = 'Spanish'
         lang1 = 'French'
+    elif country == 'Indonesia':
+        font2 = 'font/OpenSans-VariableFont_wdth,wght.ttf'
+        font1 = 'font/OpenSans-VariableFont_wdth,wght.ttf'
+        lang1 = 'Indonesian'
+        lang2 = 'Javanese'
     else:
         font1 = "font/SongMyung-Regular.ttf"
         font2 = "font/SongMyung-Regular.ttf"
@@ -86,14 +91,14 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
     # im.show()
 
 def main():
-    korean_csv = pd.read_csv('korean/Nov_korean_of_the_day.csv', encoding='utf-8')
+    korean_csv = pd.read_csv('korean/Nov_Korean_of_the_day_alls .csv', encoding='utf-8')
 
     row_length = len(korean_csv)
     # start_date = int(input('시작하는 날짜는?(예: 1101 = 11월 1일)'))
     # country = input('페이스북에 게시할 국가는?(Bangladesh, Nepal, Philippines, Mongolia)')
     # interval = int(input("페이스북 게시 간격은?(숫자만)"))
     start_date = 1102
-    country = 'USA'
+    country = 'Indonesia'
     working_days = 29
 
     basic_path = os.getcwd()
