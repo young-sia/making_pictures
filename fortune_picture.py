@@ -1,11 +1,13 @@
 from PIL import Image, ImageDraw, ImageFont
-import pandas as pd
 import os
 
 from pandas import read_csv
 
 
-def draw_fortune_picture(text1, text2, im, language, pic_number):
+# def draw_fortune_title():
+
+
+def draw_fortune_picture(text1, text2, im, pic_number, date, language):
 
     draw = ImageDraw.Draw(im)
     word_pt = 29
@@ -13,11 +15,32 @@ def draw_fortune_picture(text1, text2, im, language, pic_number):
     y = [249, 307.5, 359, 534.4, 588.6, 640,4]
     texts = [text1, text2]
 
+    if language == 'Bengali':
+        font= "font/Mina-Regular.ttf"
+        line_len = 27
+    elif language == 'Nepali':
+        font = "font/Yashomudra-Normal.ttf"
+        line_len = 27
+    elif language == 'Filipino':
+        font = "font/SongMyung-Regular.ttf"
+        line_len = 27
+    elif language == 'Mongolian':
+        font = "font/EBGaramond-Bold.ttf"
+        line_len = 30
+    elif language == 'English':
+        font = "font/NanumSquare_acR.ttf"
+        line_len = 30
+    elif language == 'Indonesian':
+        font = 'font/NotoSans-VariableFont_wdth,wght.ttf'
+        line_len = 26
+    else:
+        font = "font/NanumSquare_acR.ttf"
+        line_len = 30
+
     for j in range(2):
         text = texts[j]
         word_len = len(text1.split(' '))
         words = text.split(' ')
-        line_len = 30
         count = 0
 
         for row in range(int(len(y)/2)):
@@ -25,46 +48,69 @@ def draw_fortune_picture(text1, text2, im, language, pic_number):
             if row == 2:
                 for i in range(word_len):
                     one_line += words[i + count]
-                    if (len(one_line) + len(words[i + 1]) + 1) > (line_len - 3):
+                    if (len(one_line) + len(words[i +count + 1]) + 1) > (line_len - 3):
                         one_line += '...'
                         break
-                    elif (len(one_line) + len(words[i + 1]) + 1) == (line_len - 3):
+                    elif (len(one_line) + len(words[i + count + 1]) + 1) == (line_len - 3):
                         one_line += ' '
-                        one_line += words[i + 1]
+                        one_line += words[i +count+ 1]
                         one_line += '...'
                         break
                     else:
                         one_line += ' '
                 draw.text((329, y[row+ 3*j]), one_line,
-                          font=ImageFont.truetype("font/NanumSquare_acR.ttf", word_size), fill=(0, 0, 0))
+                          font=ImageFont.truetype(font, word_size), fill=(0, 0, 0))
             else:
                 for i in range(word_len):
                     one_line += words[i + count]
-                    if (len(one_line) + len(words[i + 1]) + 1) > line_len:
+                    if (len(one_line) + len(words[i +count + 1])) == line_len:
                         count += i + 1
                         break
-                    else:
+                    elif (len(one_line) + len(words[i +count+ 1]) + 1) <= line_len:
                         one_line += ' '
-                draw.text((329, y[row+ 3*j]), one_line,
-                          font=ImageFont.truetype("font/NanumSquare_acR.ttf", word_size), fill=(0, 0, 0))
+                    else:
+                        count += i + 1
+                        break
 
-    im.save(f"finish_fortune_picture/{language}_{pic_number}.png")
+                draw.text((329, y[row+ 3*j]), one_line,
+                          font=ImageFont.truetype(font, word_size), fill=(0, 0, 0))
+
+    im.save(f"finish_fortune_picture/{language}/{date}_{pic_number}.png")
 
 
 def main():
-    df = read_csv('fortune.csv', encoding='utf-8')
+    start_date = 1212
+    end_date = 1230
 
-    language = 'English'
+    languages = ['English', 'Bengali', 'Nepali', 'Filipino', 'Mongolian', 'Indonesian']
+
+    basic_path = os.getcwd()
+    for language in languages:
+        try:
+            os.mkdir(basic_path + '/finish_fortune_picture/' + f'{language}')
+        except:
+            pass
+
+    for date in range(start_date, end_date + 1):
+        df = read_csv(f'korean/오늘의 운세/12월/{date}.csv', encoding='utf-8')
+
+        for language in languages:
+
+            for zodiac in range(0, 12, 2):
+                pic_number = round(zodiac / 2 + 1)
+                text1 = df[f'띠 전체운세_{language}'][zodiac * 5 + 1]
+                text2 = df[f'띠 전체운세_{language}'][(zodiac + 1) * 5 + 1]
+
+                im = Image.open(f"base_fortune_picture/{pic_number}.png")
+
+                draw_fortune_picture(text1, text2, im, pic_number, date, language)
+
+        print(f'done with {date}')
+
+
     # print(df.columns)
 
-    for zodiac in range(0, 12, 2):
-        pic_number = round(zodiac/2 + 1)
-        text1 = df[f'띠 전체운세_{language}'][zodiac*5+1]
-        text2 = df[f'띠 전체운세_{language}'][(zodiac+1)*5+1]
 
-        im = Image.open(f"base_fortune_picture/{pic_number}.png")
-
-        draw_fortune_picture(text1, text2, im, language, pic_number)
 
 
 if __name__ == '__main__':

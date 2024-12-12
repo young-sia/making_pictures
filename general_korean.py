@@ -21,7 +21,7 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
     elif country == 'Nepal':
         font1 = "font/Yashomudra-Normal.ttf"
         font2 = "font/Mina-Regular.ttf"
-        lang1 = 'Nepalese'
+        lang1 = 'Nepali'
         lang2 = 'Bengali'
     elif country == 'Philippines':
         font1 = "font/SongMyung-Regular.ttf"
@@ -30,13 +30,14 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
         lang2 = 'Cebuano'
     elif country == 'Mongolia':
         font1 = "font/EBGaramond-Bold.ttf"
-        font2 = "font/EBGaramond-Bold.ttf"
+        font2 = "font/UKIJSls.ttf"
         lang1 = 'Mongolian'
-        lang2 = 'Buryat'
+        lang2 = 'Uyghur'
     elif country == 'USA':
         font2 = "font/NotoSans-VariableFont_wdth,wght.ttf"
         font1 = "font/NotoSans-VariableFont_wdth,wght.ttf"
-        lang2 = 'Spanish'
+        lang2 = 'Russian'
+        # lang2 = 'Spanish'
         lang1 = 'French'
     elif country == 'Indonesia':
         font2 = 'font/OpenSans-VariableFont_wdth,wght.ttf'
@@ -65,7 +66,7 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
     else:
         draw.text((191.9, ((y[0] + y[1]) / 2 + y[0])/2 - small_word / 2 - 10), lang1,
                   font=ImageFont.truetype('font/LibreFranklin-Bold.ttf', small_word), fill=(255, 255, 255))
-        draw.text((320.4, ((y[0] + y[1]) / 2 + y[0])/2 - small_word / 2 -10), korean_csv[lang1][row_count],
+        draw.text((320.4, ((y[0] + y[1]) / 2 + y[0])/2 - small_word / 2 - 10), korean_csv[lang1][row_count],
                   font=ImageFont.truetype(font1, small_word), fill=(255, 255, 255))
 
     # 2번째 언어
@@ -91,30 +92,56 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
     # im.show()
 
 def main():
-    korean_csv = pd.read_csv('korean/Nov_Korean_of_the_day_alls .csv', encoding='utf-8')
+    korean_csv = pd.read_csv('korean/Dec_korean_of_the_day_all.csv', encoding='utf-8')
+
+    row_length = len(korean_csv)
+    start_date = 1201
+    countries = ['USA', 'Bangladesh', 'Nepal', 'Mongolia', 'Philippines', 'Indonesia']
+    working_days = 31
+
+    basic_path = os.getcwd()
+
+    for country in countries:
+
+        try:
+            os.mkdir(basic_path + '/finish_picture_sentence/' + f'{country}_{start_date}')
+        except:
+            pass
+
+        for date in range(start_date, start_date + working_days):
+            row_num = date - start_date
+            im = Image.open(f"base_picture_sentence/2024_12/{date}.png")
+            # width, height = im.size
+            # print(f"Image width: {width}, Image height: {height}")
+            draw_pic_sentence(korean_csv, im, country, start_date, date, row_num)
+
+
+def test():
+    korean_csv = pd.read_csv('korean/Dec_korean_of_the_day_all.csv', encoding='utf-8')
 
     row_length = len(korean_csv)
     # start_date = int(input('시작하는 날짜는?(예: 1101 = 11월 1일)'))
     # country = input('페이스북에 게시할 국가는?(Bangladesh, Nepal, Philippines, Mongolia)')
     # interval = int(input("페이스북 게시 간격은?(숫자만)"))
-    start_date = 1102
-    country = 'Indonesia'
-    working_days = 29
+    start_date = 1201
+    country = 'USA'
+    working_days = 31
 
     basic_path = os.getcwd()
 
     try:
-        os.mkdir(basic_path + '/finish_picture_sentence/'+f'{country}_{start_date}')
+        os.mkdir(basic_path + '/finish_picture_sentence/' + f'{country}_{start_date}')
     except:
         pass
 
-    for date in range(start_date, start_date+working_days):
-
+    for date in range(start_date, start_date + working_days):
         row_num = date - start_date
-        im = Image.open(f"base_picture_sentence/2024_11/{date}.png")
+        im = Image.open(f"base_picture_sentence/2024_12/{date}.png")
         # width, height = im.size
         # print(f"Image width: {width}, Image height: {height}")
         draw_pic_sentence(korean_csv, im, country, start_date, date, row_num)
 
+
 if __name__ == '__main__':
-    main()
+    test()
+    # main()

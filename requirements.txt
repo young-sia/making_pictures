@@ -4,3 +4,5 @@ bs4
 googletrans
 deep_translator
 korean-romanizer
+selenium
+webdriver_manager

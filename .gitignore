@@ -11,3 +11,4 @@
 /finish_fortune_picture
 /.venv
 .idea
+__pycache__
