@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -5,7 +7,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 from pandas import read_csv
+import os
 
+absolute_path = os.path.dirname(os.path.abspath(__file__))
+# print(absolute_path)
 
 # 웹사이트 로그인 및 게시글 작성
 def post_to_famigo(df, year, month, date):
@@ -51,7 +56,7 @@ def post_to_famigo(df, year, month, date):
         for i in range(0, 14):
             if i == 0:
                 image_upload = driver.find_element(By.CSS_SELECTOR, 'input[type="file"]')  # 이미지 업로드 필드의 ID 확인 필요
-                image_path = f"automation_fortune_picture/{i}.jpg"  # 업로드할 이미지 경로
+                image_path = f"{absolute_path}/automation_fortune_picture/{i}.jpg"  # 업로드할 이미지 경로
                 image_upload.send_keys(image_path)
                 content_input = driver.find_element(By.CSS_SELECTOR,
                                                     '.fr-element[contenteditable="true"]')
@@ -60,7 +65,7 @@ def post_to_famigo(df, year, month, date):
                 time.sleep(2)
             else:
                 image_upload = driver.find_element(By.CSS_SELECTOR, 'input[type="file"]')  # 이미지 업로드 필드의 ID 확인 필요
-                image_path = f"automation_fortune_picture/{i}.png"  # 업로드할 이미지 경로
+                image_path = f"{absolute_path}/automation_fortune_picture/{i}.png"  # 업로드할 이미지 경로
                 image_upload.send_keys(image_path)
                 time.sleep(2)
 
@@ -70,7 +75,7 @@ def post_to_famigo(df, year, month, date):
                     content_input = driver.find_element(By.CSS_SELECTOR,
                                                     '.fr-element[contenteditable="true"]')  # 내용 입력 필드의 ID를 확인 후 수정
                     content_input.send_keys(Keys.RETURN)
-                    content_input.send_keys(df['띠 전체운세'][i*5-1])
+                    content_input.send_keys(df[str(i)][100*month + date])
                     content_input.send_keys(Keys.RETURN)
                     content_input.send_keys(Keys.RETURN)
                     time.sleep(2)
@@ -97,11 +102,14 @@ def post_to_famigo(df, year, month, date):
         driver.quit()
 
 def main():
-    today = 1213
+    today = datetime.now()
     year = 2024
-    month = int(today / 100)
-    date = int(today%100)
-    df = read_csv(f'korean/오늘의 운세/12월/{today}.csv', encoding='utf-8')
+    month = today.month
+    date = today.day
+    df = read_csv(f'automation_fortune_picture/data/12월.csv', encoding='utf-8')
+    # print(df)
+    df.set_index('Date', inplace=True)
+    # print(df)
     post_to_famigo(df, year, month, date)
 
 

@@ -51,20 +51,50 @@ def translate_fortune(df):
 
     return df
 
+def make_excel(fortune, df, date, count):
+
+    df.loc[count, 'Date'] = str(date)
+    # print(df)
+    for i in range(1, 13):
+        df.loc[count, str(i)] = fortune.loc[5*i-1, '띠 전체운세']
+    return df
+
+
 
 def main():
 
     year_month = 2024.12
     month = 12
-    start_date = 1212
-    end_date = 1230
+    start_date = 1215
+    end_date = 1216
+
+    df_all = pd.DataFrame({'Date':[], '1':[], '2':[], '3':[], '4':[], '5':[], '6':[], '7':[], '8':[], '9':[],
+                           '10':[], '11':[], '12':[]})
+    # print(df_all)
+
+
 
     for date in range(start_date, end_date + 1):
         day_fortune = scrap_fortune(year_month, date)
         fortune_csv = translate_fortune(day_fortune)
 
+        df_all = make_excel(day_fortune, df_all, date, (date - start_date))
+
         fortune_csv.to_csv(f"korean/오늘의 운세/{month}월/{date}.csv", index=False, encoding='utf-8-sig')
         print(f'finished {date}')
 
+    df_all.to_csv(f"korean/오늘의 운세/{month}월.csv", index=False, encoding='utf-8-sig')
+
 if __name__ == '__main__':
+    # start_date = 1213
+    # end_date = 1230
+    # df_all = pd.DataFrame({'Date':[], '1':[], '2':[], '3':[], '4':[], '5':[], '6':[], '7':[], '8':[], '9':[],
+    #                        '10':[], '11':[], '12':[]})
+    #
+    # for date in range(start_date, end_date + 1):
+    #     fortune_csv = pd.read_csv(f'korean/오늘의 운세/12월/{date}.csv', encoding='utf-8')
+    #     df_all = make_excel(fortune_csv, df_all, date, date - start_date)
+    #
+    # df_all.to_csv(f"automation_fortune_picture/data/12월.csv", index=False, encoding='utf-8-sig')
+
     main()
