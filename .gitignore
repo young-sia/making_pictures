@@ -13,3 +13,4 @@
 .idea
 __pycache__
 .env
+/automation_fortune_picture
