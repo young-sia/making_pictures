@@ -35,14 +35,15 @@ def translate(data):
     return data
 
 def main():
-    korean_csv = pd.read_csv('korean/Dec_korean_of_the_day.csv', encoding='utf-8')
+    month_abbr = 'Jan'
+    korean_csv = pd.read_csv(f'korean/{month_abbr}_korean_of_the_day.csv', encoding='utf-8')
     data = translate(korean_csv)
 
     # print(data['Pronunciation'])
     print(len(data.columns))
     # print(data.head())
 
-    data.to_csv('korean/Dec_korean_of_the_day_all.csv', index = False, encoding='utf-8-sig')
+    data.to_csv(f'korean/{month_abbr}_korean_of_the_day_all.csv', index = False, encoding='utf-8-sig')
 
 
 if __name__ == '__main__':

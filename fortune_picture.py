@@ -4,8 +4,6 @@ import os
 from pandas import read_csv
 
 
-# def draw_fortune_title():
-
 
 def draw_fortune_picture(text1, text2, im, pic_number, date, language):
 
@@ -33,6 +31,9 @@ def draw_fortune_picture(text1, text2, im, pic_number, date, language):
     elif language == 'Indonesian':
         font = 'font/NotoSans-VariableFont_wdth,wght.ttf'
         line_len = 26
+    elif language == 'Russian':
+        font = "font/NotoSans-VariableFont_wdth,wght.ttf"
+        line_len = 30
     else:
         font = "font/NanumSquare_acR.ttf"
         line_len = 30
@@ -75,14 +76,14 @@ def draw_fortune_picture(text1, text2, im, pic_number, date, language):
                 draw.text((329, y[row+ 3*j]), one_line,
                           font=ImageFont.truetype(font, word_size), fill=(0, 0, 0))
 
-    im.save(f"finish_fortune_picture/{language}/{date}_{pic_number}.png")
+    im.save(f"finish_fortune_picture/{language}/{date}_{pic_number}.jpg")
 
 
 def main():
-    start_date = 1212
-    end_date = 1230
+    start_date = 122
+    end_date = 131
 
-    languages = ['English', 'Bengali', 'Nepali', 'Filipino', 'Mongolian', 'Indonesian']
+    languages = ['English', 'Bengali', 'Nepali', 'Filipino', 'Mongolian', 'Indonesian', 'Russian']
 
     basic_path = os.getcwd()
     for language in languages:
@@ -92,7 +93,7 @@ def main():
             pass
 
     for date in range(start_date, end_date + 1):
-        df = read_csv(f'korean/오늘의 운세/12월/{date}.csv', encoding='utf-8')
+        df = read_csv(f'korean/오늘의 운세/1월/{date}.csv', encoding='utf-8')
 
         for language in languages:
 
@@ -101,7 +102,7 @@ def main():
                 text1 = df[f'띠 전체운세_{language}'][zodiac * 5 + 1]
                 text2 = df[f'띠 전체운세_{language}'][(zodiac + 1) * 5 + 1]
 
-                im = Image.open(f"base_fortune_picture/{pic_number}.png")
+                im = Image.open(f"base_fortune_picture/{pic_number}.jpg")
 
                 draw_fortune_picture(text1, text2, im, pic_number, date, language)
 

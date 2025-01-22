@@ -1,3 +1,4 @@
+from calendar import month_abbr
 from turtledemo.penrose import start
 
 from PIL import Image, ImageDraw, ImageFont
@@ -87,15 +88,18 @@ def draw_pic_sentence(korean_csv, im, country, start_date, date, row_count):
         draw.text((320.4, ((y[0] + y[1]) / 2 + y[1])/2 - small_word / 2+ 10), korean_csv['English'][row_count],
                   font=ImageFont.truetype('font/Roboto-Medium.ttf', small_word), fill=(255, 255, 255))
 
-    im.save(f"finish_picture_sentence/{country}_{start_date}/{country}_{date}.png")
-    print(f'done with {country}_{date}.png')
+    im.save(f"finish_picture_sentence/{country}_{start_date}/{country}_{date}.jpg")
+    print(f'done with {country}_{date}.jpg')
     # im.show()
 
 def main():
-    korean_csv = pd.read_csv('korean/Dec_korean_of_the_day_all.csv', encoding='utf-8')
+    month_abbr = 'Jan'
+    year = 2025
+    month = 1
+    korean_csv = pd.read_csv(f'korean/{month_abbr}_korean_of_the_day_all.csv', encoding='utf-8')
 
     row_length = len(korean_csv)
-    start_date = 1201
+    start_date = 101
     countries = ['USA', 'Bangladesh', 'Nepal', 'Mongolia', 'Philippines', 'Indonesia']
     working_days = 31
 
@@ -110,7 +114,7 @@ def main():
 
         for date in range(start_date, start_date + working_days):
             row_num = date - start_date
-            im = Image.open(f"base_picture_sentence/2024_12/{date}.png")
+            im = Image.open(f"base_picture_sentence/{year}_{month}/{date}.jpg")
             # width, height = im.size
             # print(f"Image width: {width}, Image height: {height}")
             draw_pic_sentence(korean_csv, im, country, start_date, date, row_num)
@@ -119,11 +123,13 @@ def main():
 def test():
     korean_csv = pd.read_csv('korean/Dec_korean_of_the_day_all.csv', encoding='utf-8')
 
+    year = 2025
+    month = 1
     row_length = len(korean_csv)
     # start_date = int(input('시작하는 날짜는?(예: 1101 = 11월 1일)'))
     # country = input('페이스북에 게시할 국가는?(Bangladesh, Nepal, Philippines, Mongolia)')
     # interval = int(input("페이스북 게시 간격은?(숫자만)"))
-    start_date = 1201
+    start_date = 101
     country = 'USA'
     working_days = 31
 
@@ -136,12 +142,12 @@ def test():
 
     for date in range(start_date, start_date + working_days):
         row_num = date - start_date
-        im = Image.open(f"base_picture_sentence/2024_12/{date}.png")
+        im = Image.open(f"base_picture_sentence/{year}_{month}/{date}.jpg")
         # width, height = im.size
         # print(f"Image width: {width}, Image height: {height}")
         draw_pic_sentence(korean_csv, im, country, start_date, date, row_num)
 
 
 if __name__ == '__main__':
-    test()
-    # main()
+    # test()
+    main()

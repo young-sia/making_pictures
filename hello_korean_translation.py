@@ -28,13 +28,15 @@ def translate(data):
     return data
 
 def main():
-    korean_csv = pd.read_csv('korean/korean_words_1124.csv', encoding='utf-8')
+    BoK = 'BoK_1사분기'
+    # korean_csv = pd.read_csv(f'korean/korean_words_1124.csv', encoding='utf-8')
+    korean_csv = pd.read_csv(f'korean/{BoK}.csv', encoding='utf-8')
     data = translate(korean_csv)
 
-    print(data['Pronunciation'])
+    # print(data['Pronunciation'])
     print(data.columns)
 
-    # data.to_csv('korean/korean_words_1124_all.csv', index=False)
+    data.to_csv(f'korean/{BoK}_translated.csv', index=False, encoding='utf-8-sig')
 
 
 if __name__ == '__main__':
